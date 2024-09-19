@@ -4,7 +4,7 @@ import {
   editJobDb,
   addJobDb,
   deleteJobDb,
-} from "../outils";
+} from "../repository";
 import { connectToMongo } from "../config/database";
 
 export function getAllJobs() {
