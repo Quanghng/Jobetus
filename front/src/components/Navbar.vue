@@ -1,6 +1,11 @@
 <script setup>
 import { RouterLink, useRoute } from "vue-router";
 import logo from "@/assets/img/logo.png";
+import { useAuthStore } from "@/stores/AuthStore";
+import { useUsersStore } from "@/stores/UserStore";
+
+const authStore = useAuthStore();
+const usersStore = useUsersStore();
 
 const isActiveLink = (routePath) => {
   const route = useRoute();
@@ -60,6 +65,7 @@ const isActiveLink = (routePath) => {
                   'py-2',
                   'rounded-md',
                 ]"
+                v-if="authStore.isLoggedIn"
                 >Add Job</RouterLink
               >
               <RouterLink
@@ -73,8 +79,21 @@ const isActiveLink = (routePath) => {
                   'py-2',
                   'rounded-md',
                 ]"
+                v-else
                 >Login</RouterLink
               >
+              <button
+                @click="authStore.logout()"
+                class="hover:bg-gray-900 hover:text-white text-white px-3 py-2 rounded-md"
+                v-if="authStore.isLoggedIn">
+                Logout
+              </button>
+
+              <span
+                class="bg-teal-500 text-black font-semibold px-3 py-2 rounded-md"
+                v-if="authStore.isLoggedIn">
+                {{ authStore.user.data.user.username }}
+              </span>
             </div>
           </div>
         </div>

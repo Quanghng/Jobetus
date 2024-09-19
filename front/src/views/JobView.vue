@@ -5,10 +5,13 @@ import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import BackButton from "@/components/BackButton.vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
+import { useAuthStore } from "@/stores/AuthStore";
 
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
+
+const authStore = useAuthStore();
 
 const jobId = route.params.id;
 
@@ -23,7 +26,7 @@ const deleteJob = async () => {
     if (confirm) {
       await axios.delete(`/api/jobs/${jobId}`);
       toast.success("Job Deleted Successfully");
-      router.push("/jobs");
+      router.push({ name: "home" });
     }
   } catch (error) {
     console.error("Error deleting job", error);
@@ -103,7 +106,9 @@ onMounted(async () => {
           </div>
 
           <!-- Manage -->
-          <div class="bg-white p-6 rounded-lg shadow-md mt-6">
+          <div
+            v-if="authStore.isLoggedIn"
+            class="bg-white p-6 rounded-lg shadow-md mt-6">
             <h3 class="text-xl font-bold mb-6">Manage Job</h3>
             <RouterLink
               :to="`/jobs/edit/${state.job.id}`"

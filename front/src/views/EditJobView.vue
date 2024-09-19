@@ -6,6 +6,7 @@ import { useToast } from "vue-toastification";
 import axios from "axios";
 
 const route = useRoute();
+const toast = useToast();
 
 const jobId = route.params.id;
 
@@ -28,8 +29,6 @@ const state = reactive({
   isLoading: true,
 });
 
-const toast = useToast();
-
 const handleSubmit = async () => {
   const updatedJob = {
     title: form.title,
@@ -51,7 +50,7 @@ const handleSubmit = async () => {
     router.push(`/jobs/${response.data.id}`);
   } catch (error) {
     console.error("Error fetching job", error);
-    toast.error("Job Was Not Added");
+    toast.error("Job Was Not Updated");
   }
 };
 
