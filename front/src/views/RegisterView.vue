@@ -21,8 +21,7 @@ async function onSubmit(values) {
   try {
     // values = newUser
     await authStore.register(values);
-    await router.push({ name: "login" });
-    toast.success("Registration successful!");
+    router.push({ name: "login" });
   } catch (error) {
     const errorMessage = error.response?.data?.message || "Registration error!";
     toast.error(errorMessage);

@@ -20,6 +20,7 @@ export const useAuthStore = defineStore({
   actions: {
     async register(newUser) {
       await axios.post(`api/users/register`, newUser);
+      toast.success("Registration successful!");
     },
     async login(username, password) {
       try {
