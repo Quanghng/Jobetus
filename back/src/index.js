@@ -9,6 +9,7 @@ import {
   handleAddJob,
   handleDeleteJob,
 } from "./controllers/jobController";
+import { handleRegisterUser, handleLogin } from "./controllers/authController";
 import { connectToMongo } from "./config/database";
 
 dotenv.config({
@@ -30,11 +31,16 @@ connectToMongo()
     app.use(express.json());
 
     // Define routes and attach controller functions
+    // Job routes
     app.get("/jobs", handleGetAllJobs);
     app.get("/jobs/:id", handleGetJob);
     app.put("/jobs/:id", handleUpdateJob);
     app.post("/jobs", handleAddJob);
     app.delete("/jobs/:id", handleDeleteJob);
+
+    // User routes
+    app.post("/users/register", handleRegisterUser);
+    app.post("/authenticate", handleLogin);
 
     app.listen(port, () => {
       console.log(`[server]: Server is running at http://localhost:${port}`);
