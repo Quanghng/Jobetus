@@ -6,6 +6,7 @@ function main() {
   try {
     client.connect().then(() => {
       const db = client.db("etuJobsDB");
+      console.log("Database created: etuJobsDB");
       return db
         .createCollection("jobs")
         .then(() => {

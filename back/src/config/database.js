@@ -5,7 +5,7 @@ dotenv.config({ path: "../env" });
 
 export async function connectToMongo() {
   try {
-    await mongoose.connect("mongodb://localhost:27017", {
+    await mongoose.connect(process.env.MONGO_URI, {
       dbName: "etuJobsDB",
     });
     console.log("Connected to MongoDB");
