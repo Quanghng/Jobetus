@@ -16,7 +16,7 @@ export async function handleRegisterUser(req, res) {
     if (isUserExists) {
       return res.status(400).json({ message: "User already exsits !" });
     }
-    user = await registerUser(newUser);
+    const user = await registerUser(newUser);
     res.status(201).json(user);
   } catch (error) {
     res.status(500).send("An error occurred while adding user.");

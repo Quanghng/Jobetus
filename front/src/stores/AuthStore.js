@@ -19,8 +19,8 @@ export const useAuthStore = defineStore({
     async register(newUser) {
       try {
         await axios.post(`api/users/register`, newUser);
-        toast.success("Registration successful!");
         router.push({ name: "login" });
+        toast.success("Registration successful!");
       } catch (error) {
         const errorMessage =
           error.response?.data?.message || "Authentication error!";
