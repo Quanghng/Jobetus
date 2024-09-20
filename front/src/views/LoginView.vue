@@ -14,8 +14,6 @@ async function onSubmit(values) {
   const authStore = useAuthStore();
   const { username, password } = values;
   await authStore.login(username, password);
-  authStore.setUser;
-  toast.success("Login successfully !");
 }
 </script>
 

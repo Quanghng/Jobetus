@@ -92,7 +92,7 @@ const isActiveLink = (routePath) => {
               <span
                 class="bg-teal-500 text-black font-semibold px-3 py-2 rounded-md"
                 v-if="authStore.isLoggedIn">
-                {{ authStore.user.data.user.username }}
+                {{ authStore.user.username }}
               </span>
             </div>
           </div>

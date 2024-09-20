@@ -10,11 +10,9 @@ const toast = useToast();
 export const useAuthStore = defineStore({
   id: "auth",
   state: () => ({
-    // initialize state from local storage to enable user to stay logged in
-    user: JSON.parse(localStorage.getItem("user")),
-    token: null,
-    isLoggedIn: false,
-    // redirect the user to the previous url after successful login
+    user: JSON.parse(localStorage.getItem("user")) || null,
+    token: localStorage.getItem("token") || null,
+    isLoggedIn: !!localStorage.getItem("token"), // Check if token exists to set isLoggedIn
     returnUrl: null,
   }),
   actions: {
@@ -25,23 +23,28 @@ export const useAuthStore = defineStore({
     async login(username, password) {
       try {
         // TODO at backend
-        const user = await axios.post(`/api/authenticate`, {
+        const response = await axios.post(`/api/authenticate`, {
           username,
           password,
         });
 
+        const token = response.data.user.token;
+        const user = response.data.user;
+
         // store user details and jwt in local storage to keep user logged in between page refreshes
-        // TODO check if need both
-        const token = user.token;
         localStorage.setItem("token", token);
+        console.log("token :", token);
+        console.log("user :", user);
         localStorage.setItem("user", JSON.stringify(user));
 
         // update pinia state
         this.user = user;
         this.user.token = token;
         this.isLoggedIn = true;
+
         // redirect to previous url or default to home page
         router.push({ name: "home" });
+        toast.success("Login successfully !");
       } catch (error) {
         const errorMessage =
           error.response?.data?.message || "Authentication error!";
@@ -53,7 +56,6 @@ export const useAuthStore = defineStore({
       if (token) {
         this.token = token;
         this.isLoggedIn = true;
-        // Optionally, decode the JWT and extract user info
       } else {
         this.isLoggedIn = false;
       }
