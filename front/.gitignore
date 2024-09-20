@@ -16,6 +16,8 @@ coverage
 
 /cypress/videos/
 /cypress/screenshots/
+front/google-chrome-stable_current_amd64.deb
+
 
 # Editor directories and files
 .vscode/*
