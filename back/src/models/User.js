@@ -26,7 +26,7 @@ userSchema.pre("save", async function (next) {
 // Check if password matches
 userSchema.methods.comparePassword = async function (candidatePassword) {
   try {
-    return isMatch;
+    return await bcrypt.compare(candidatePassword, this.password);
   } catch (error) {
     console.error("Error comparing passwords:", error);
     throw error;
