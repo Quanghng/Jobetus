@@ -21,8 +21,12 @@ jobs:
         with:
           node-version: "20.17.0"
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Install Backend Dependencies
+        run: |
+          cd jobetus/back
+          npm install
 
-      - name: Run Tests
-        run: npm test
+      - name: Run Backend Tests
+        run: |
+          cd jobetus/back
+          npm test
