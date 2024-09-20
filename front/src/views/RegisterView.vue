@@ -16,16 +16,9 @@ const schema = Yup.object().shape({
 });
 
 async function onSubmit(values) {
-  const usersStore = useUsersStore();
   const authStore = useAuthStore();
-  try {
-    // values = newUser
-    await authStore.register(values);
-    router.push({ name: "login" });
-  } catch (error) {
-    const errorMessage = error.response?.data?.message || "Registration error!";
-    toast.error(errorMessage);
-  }
+  // values = newUser
+  await authStore.register(values);
 }
 </script>
 

@@ -17,8 +17,15 @@ export const useAuthStore = defineStore({
   }),
   actions: {
     async register(newUser) {
-      await axios.post(`api/users/register`, newUser);
-      toast.success("Registration successful!");
+      try {
+        await axios.post(`api/users/register`, newUser);
+        toast.success("Registration successful!");
+        router.push({ name: "login" });
+      } catch (error) {
+        const errorMessage =
+          error.response?.data?.message || "Authentication error!";
+        toast.error(errorMessage);
+      }
     },
     async login(username, password) {
       try {

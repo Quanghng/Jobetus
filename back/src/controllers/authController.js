@@ -10,7 +10,13 @@ dotenv.config({
 export async function handleRegisterUser(req, res) {
   const newUser = req.body;
   try {
-    const user = await registerUser(newUser);
+    const isUserExists = await UserModel.findOne({
+      username: newUser.username,
+    });
+    if (isUserExists) {
+      return res.status(400).json({ message: "User already exsits !" });
+    }
+    user = await registerUser(newUser);
     res.status(201).json(user);
   } catch (error) {
     res.status(500).send("An error occurred while adding user.");
@@ -22,12 +28,12 @@ export async function handleLogin(req, res) {
   try {
     const user = await UserModel.findOne({ username });
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "User doesn't exsit !" });
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Wrong password !" });
     }
 
     // Generate and assign JWT
