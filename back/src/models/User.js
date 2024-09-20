@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   username: { type: String, required: true },
-  password: { type: String, required: true },
+  password: { type: String, required: true, maxLength: 256 }, // Hashed with bcrypt
   jobs: [{ type: String }], // Array of job IDs (UUIDs), defaults to an empty array
   token: { type: String },
   createdAt: { type: Date, default: Date.now },
@@ -25,7 +25,12 @@ userSchema.pre("save", async function (next) {
 
 // Check if password matches
 userSchema.methods.comparePassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
+  try {
+    return isMatch;
+  } catch (error) {
+    console.error("Error comparing passwords:", error);
+    throw error;
+  }
 };
 
 // Middleware to update `updatedAt` on save
