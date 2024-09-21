@@ -2,15 +2,17 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import { connectToMongo } from "./config/database";
 import {
   handleGetAllJobs,
   handleGetJob,
   handleUpdateJob,
   handleAddJob,
   handleDeleteJob,
+  handleGetJobsByUserId,
 } from "./controllers/jobController";
 import { handleRegisterUser, handleLogin } from "./controllers/authController";
-import { connectToMongo } from "./config/database";
+import { handleGetUser } from "./controllers/userController";
 
 dotenv.config({
   path: ".env",
@@ -38,9 +40,13 @@ connectToMongo()
     app.post("/jobs", handleAddJob);
     app.delete("/jobs/:id", handleDeleteJob);
 
-    // User routes
+    // Auth routes
     app.post("/users/register", handleRegisterUser);
     app.post("/authenticate", handleLogin);
+
+    // User routes
+    app.get("/user/:id", handleGetUser);
+    app.get("/user/:id/jobs", handleGetJobsByUserId);
 
     app.listen(port, () => {
       console.log(`[server]: Server is running at http://localhost:${port}`);

@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   username: { type: String, required: true },
   password: { type: String, required: true, maxLength: 256 }, // Hashed with bcrypt
-  jobs: [{ type: String }], // Array of job IDs (UUIDs), defaults to an empty array
   token: { type: String },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

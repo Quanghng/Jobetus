@@ -4,6 +4,7 @@ import {
   editJobDb,
   addJobDb,
   deleteJobDb,
+  findJobsByCreatorIdDb,
 } from "../repositories/jobRepository";
 
 // Fetch all jobs
@@ -23,6 +24,18 @@ export function getJob(jobId) {
   return findJobDb(jobId)
     .then((job) => {
       return job;
+    })
+    .catch((error) => {
+      console.error("An error has occurred:", error);
+      throw error;
+    });
+}
+
+// Fetch all jobs by userId
+export function getJobsByUserId(userId) {
+  return findJobsByCreatorIdDb(userId)
+    .then((jobs) => {
+      return jobs;
     })
     .catch((error) => {
       console.error("An error has occurred:", error);

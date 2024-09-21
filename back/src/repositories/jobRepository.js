@@ -21,3 +21,7 @@ export function addJobDb(newJob) {
 export function deleteJobDb(jobId) {
   return JobModel.deleteOne({ id: jobId });
 }
+
+export function findJobsByCreatorIdDb(creatorId) {
+  return JobModel.find({ creatorId });
+}

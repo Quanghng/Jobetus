@@ -1,10 +1,9 @@
 import { defineStore } from "pinia";
 import { useToast } from "vue-toastification";
-// import { useUsersStore } from "./UserStore";
+import { useUsersStore } from "./UserStore";
 import router from "@/router";
 import axios from "axios";
 
-// const usersStore = useUsersStore();
 const toast = useToast();
 
 export const useAuthStore = defineStore({
@@ -40,8 +39,6 @@ export const useAuthStore = defineStore({
 
         // store user details and jwt in local storage to keep user logged in between page refreshes
         localStorage.setItem("token", token);
-        console.log("token :", token);
-        console.log("user :", user);
         localStorage.setItem("user", JSON.stringify(user));
 
         // update pinia state
@@ -68,12 +65,15 @@ export const useAuthStore = defineStore({
       }
     },
     logout() {
-      this.user = null;
-      this.token = null;
-      this.isLoggedIn = false;
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      router.push({ name: "home" });
+      const confirm = window.confirm("Are you sure you want to logout?");
+      if (confirm) {
+        this.user = null;
+        this.token = null;
+        this.isLoggedIn = false;
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        router.push({ name: "home" });
+      }
     },
   },
 });

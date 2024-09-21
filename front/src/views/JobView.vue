@@ -61,6 +61,11 @@ onMounted(async () => {
               <i class="pi pi-map-marker text-xl text-orange-700 mr-2"></i>
               <p class="text-orange-700">{{ state.job.location }}</p>
             </div>
+            <div class="flex justify-between text-sm text-gray-400">
+              <p></p>
+              <!-- Empty element to fill left space -->
+              <p>Created by: {{ state.job.creator }}</p>
+            </div>
           </div>
 
           <div class="bg-white p-6 rounded-lg shadow-md mt-6">
@@ -82,7 +87,7 @@ onMounted(async () => {
         <aside>
           <!-- Company Info -->
           <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-bold mb-6">Company Info</h3>
+            <h3 class="text-xl font-bold mb-6 text-gray-700">Company Info</h3>
 
             <h2 class="text-2xl">{{ state.job.company.name }}</h2>
 
@@ -107,9 +112,11 @@ onMounted(async () => {
 
           <!-- Manage -->
           <div
-            v-if="authStore.isLoggedIn"
+            v-if="
+              authStore.isLoggedIn && state.job.creatorId === authStore.user.id
+            "
             class="bg-white p-6 rounded-lg shadow-md mt-6">
-            <h3 class="text-xl font-bold mb-6">Manage Job</h3>
+            <h3 class="text-xl font-bold mb-6 text-gray-700">Manage Job</h3>
             <RouterLink
               :to="`/jobs/edit/${state.job.id}`"
               class="bg-teal-500 hover:bg-teal-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"

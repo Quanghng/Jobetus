@@ -5,6 +5,7 @@ import {
   updateJob,
   addJob,
   deleteJob,
+  getJobsByUserId,
 } from "../services/jobService";
 
 // Fetch all jobs
@@ -29,6 +30,23 @@ export async function handleGetJob(req, res) {
     }
   } catch (error) {
     res.status(500).send("An error occurred while fetching job.");
+  }
+}
+
+// Get jobs by userId
+export async function handleGetJobsByUserId(req, res) {
+  console.log("inside handler...");
+  const userId = req.params.id;
+  try {
+    const jobs = await getJobsByUserId(userId);
+    console.log("jobs : ", jobs);
+    if (jobs) {
+      res.status(200).json(jobs);
+    } else {
+      res.status(404).send("Jobs not found.");
+    }
+  } catch (error) {
+    res.status(500).send("An error occurred while fetching jobs.");
   }
 }
 

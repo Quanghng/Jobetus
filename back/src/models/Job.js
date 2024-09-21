@@ -21,6 +21,8 @@ const jobSchema = new mongoose.Schema({
   description: { type: String, required: true },
   salary: { type: String },
   company: { type: companySchema, required: true }, // Use the company schema here
+  creator: { type: String, required: true },
+  creatorId: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

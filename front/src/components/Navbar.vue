@@ -88,12 +88,12 @@ const isActiveLink = (routePath) => {
                 v-if="authStore.isLoggedIn">
                 Logout
               </button>
-
-              <span
-                class="bg-teal-500 text-black font-semibold px-3 py-2 rounded-md"
+              <RouterLink
+                :to="`/user/${authStore.user.id}`"
+                class="bg-teal-500 text-black font-semibold px-3 py-2 rounded-md hover:bg-teal-600 hover:text-white"
                 v-if="authStore.isLoggedIn">
                 {{ authStore.user.username }}
-              </span>
+              </RouterLink>
             </div>
           </div>
         </div>

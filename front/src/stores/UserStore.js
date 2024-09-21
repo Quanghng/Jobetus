@@ -5,22 +5,20 @@ import axios from "axios";
 export const useUsersStore = defineStore({
   id: "user",
   state: () => ({
-    // Can hold {} / {loading: true} / [{...},{...},..,{...}] / {error: message}
-    // users: {},
-
-    // Can hold {} / {loading: true} / {...} / {error: message}
+    // Can hold {} / {loading: true}
     user: {},
     jobs: [],
   }),
   actions: {
     // GetAllJobs -> filter id match jobs
-    async getAll() {
+    async getJobs() {
       this.users = { loading: true };
       try {
         // TODO at backend
-        this.users = await axios.get(baseUrl);
+        // this.users = await axios.get(baseUrl);
       } catch (error) {
-        this.users = { error };
+        // TODO toast here
+        // this.users = { error };
       }
     },
     // async getById(id) {

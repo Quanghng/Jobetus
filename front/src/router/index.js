@@ -7,6 +7,8 @@ import AddJobView from "@/views/AddJobView.vue";
 import EditJobView from "@/views/EditJobView.vue";
 import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
+import UserProfileView from "@/views/UserProfileView.vue";
+import EditUserProfileView from "@/views/EditUserProfileView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,7 +40,7 @@ const router = createRouter({
       component: EditJobView,
     },
 
-    // Account Routes
+    // Login Routes
     {
       path: "/login",
       name: "login",
@@ -48,6 +50,18 @@ const router = createRouter({
       path: "/register",
       name: "register",
       component: RegisterView,
+    },
+
+    // User Routes
+    {
+      path: "/user/:id",
+      name: "user",
+      component: UserProfileView,
+    },
+    {
+      path: "/user/edit/:id",
+      name: "edit-user",
+      component: EditUserProfileView,
     },
 
     // 404 Not Found

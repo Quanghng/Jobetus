@@ -3,6 +3,8 @@ import router from "@/router";
 import { reactive } from "vue";
 import { useToast } from "vue-toastification";
 import axios from "axios";
+import { useUsersStore } from "@/stores/UserStore";
+import { useAuthStore } from "@/stores/AuthStore";
 
 const form = reactive({
   type: "Full-Time",
@@ -21,6 +23,7 @@ const form = reactive({
 const toast = useToast();
 
 const handleSubmit = async () => {
+  const authStore = useAuthStore();
   const newJob = {
     title: form.title,
     type: form.type,
@@ -33,6 +36,8 @@ const handleSubmit = async () => {
       contactEmail: form.company.contactEmail,
       contactPhone: form.company.contactPhone,
     },
+    creator: authStore.user.username,
+    creatorId: authStore.user.id,
   };
 
   try {
