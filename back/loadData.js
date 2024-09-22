@@ -1,132 +1,181 @@
 const { MongoClient } = require("mongodb");
+const bcrypt = require("bcrypt");
 
-const client = new MongoClient("mongodb://localhost:27017");
+require("dotenv").config();
 
-function main() {
+async function main() {
+  const client = new MongoClient(process.env.MONGO_URI);
+
   try {
-    client.connect().then(() => {
-      const db = client.db("etuJobsDB");
-      console.log("Database created: etuJobsDB");
-      return db
-        .createCollection("jobs")
-        .then(() => {
-          console.log("Successfully created collection");
-          return db.collection("jobs").insertMany([
-            {
-              title: "Senior Vue Dev",
-              type: "Part-Time",
-              location: "Boston, MA",
-              description:
-                "We are seeking a talented Front-End Developer to join our team in Boston, MA. The ideal candidate will have strong skills in HTML, CSS, and JavaScript, with experience working with modern JavaScript frameworks such as Vue or Angular.",
-              salary: "$90K - $100K",
-              company: {
-                name: "NewTek Solutions",
-                description:
-                  "NewTek Solutions is a leading technology company specializing in web development and digital solutions. We pride ourselves on delivering high-quality products and services to our clients while fostering a collaborative and innovative work environment.",
-                contactEmail: "contact@teksolutions.com",
-                contactPhone: "555-555-5555",
-              },
-              id: "1",
-            },
-            {
-              title: "Front-End Engineer Senior (Vue)",
-              type: "Full-Time",
-              location: "Miami, FL",
-              description:
-                "Join our team as a Front-End Developer in sunny Miami, FL. We are looking for a motivated individual with a passion for crafting beautiful and responsive web applications. Experience with UI/UX design principles and a strong attention to detail are highly desirable.",
-              salary: "$70K - $80K",
-              company: {
-                name: "Veneer Solutions",
-                description:
-                  "Veneer Solutions is a creative agency specializing in digital design and development. Our team is dedicated to pushing the boundaries of creativity and innovation to deliver exceptional results for our clients.",
-                contactEmail: "contact@loremipsum.com",
-                contactPhone: "555-555-5555",
-              },
-              id: "2",
-            },
-            {
-              id: "3",
-              title: "Vue.js Developer",
-              type: "Full-Time",
-              description:
-                "Are you passionate about front-end development? Join our team in vibrant Brooklyn, NY, and work on exciting projects that make a difference. We offer competitive compensation and a collaborative work environment where your ideas are valued.",
-              location: "Brooklyn, NY",
-              salary: "$70K - $80K",
-              company: {
-                name: "Dolor Cloud",
-                description:
-                  "Dolor Cloud is a leading technology company specializing in digital solutions for businesses of all sizes. With a focus on innovation and customer satisfaction, we are committed to delivering cutting-edge products and services.",
-                contactEmail: "contact@dolorsitamet.com",
-                contactPhone: "555-555-5555",
-              },
-            },
-            {
-              id: "4",
-              title: "Vue Front-End Developer",
-              type: "Part-Time",
-              description:
-                "Join our team as a Part-Time Front-End Developer in beautiful Pheonix, AZ. We are looking for a self-motivated individual with a passion for creating engaging user experiences. This position offers flexible hours and the opportunity to work remotely.",
-              location: "Pheonix, AZ",
-              salary: "$60K - $70K",
-              company: {
-                name: "Alpha Elite",
-                description:
-                  "Alpha Elite is a dynamic startup specializing in digital marketing and web development. We are committed to fostering a diverse and inclusive workplace where creativity and innovation thrive.",
-                contactEmail: "contact@adipisicingelit.com",
-                contactPhone: "555-555-5555",
-              },
-            },
-            {
-              id: "5",
-              title: "Full Stack Vue Developer",
-              type: "Full-Time",
-              description:
-                "Exciting opportunity for a Full-Time Front-End Developer in bustling Atlanta, GA. We are seeking a talented individual with a passion for building elegant and scalable web applications. Join our team and make an impact!",
-              location: "Atlanta, GA",
-              salary: "$90K - $100K",
-              company: {
-                name: "Browning Technologies",
-                description:
-                  "Browning Technologies is a rapidly growing technology company specializing in e-commerce solutions. We offer a dynamic and collaborative work environment where employees are encouraged to think creatively and innovate.",
-                contactEmail: "contact@consecteturadipisicing.com",
-                contactPhone: "555-555-5555",
-              },
-            },
-            {
-              id: "6",
-              title: "Vue Native Developer",
-              type: "Full-Time",
-              description:
-                "Join our team as a Front-End Developer in beautiful Portland, OR. We are looking for a skilled and enthusiastic individual to help us create innovative web solutions. Competitive salary and great benefits package available.",
-              location: "Portland, OR",
-              salary: "$100K - $110K",
-              company: {
-                name: "Port Solutions INC",
-                description:
-                  "Port Solutions is a leading technology company specializing in software development and digital marketing. We are committed to providing our clients with cutting-edge solutions and our employees with a supportive and rewarding work environment.",
-                contactEmail: "contact@ipsumlorem.com",
-                contactPhone: "555-555-5555",
-              },
-            },
-          ]);
-        })
-        .then((result) => {
-          if (result.acknowledged) {
-            console.log("Successfully load data");
-            process.exit(0);
-          }
-        });
-    });
+    // Connect to MongoDB
+    await client.connect();
+    console.log("Connected to MongoDB");
+
+    const database = client.db("etuJobsDB");
+    const jobCollection = database.collection("jobs");
+    const userCollection = database.collection("users");
+
+    // Load job data
+    const jobs = [
+      {
+        title: "Software Engineer",
+        type: "Full-Time",
+        location: "San Francisco, CA",
+        description:
+          "Join our team to develop cutting-edge software solutions.",
+        salary: "$120K - $140K",
+        company: {
+          name: "Tech Innovations Inc.",
+          description: "A leader in software development and tech solutions.",
+          contactEmail: "info@techinnovations.com",
+          contactPhone: "+1 (415) 555-0123",
+        },
+        creator: "johnsmith",
+        creatorId: "12345678-1234-1234-1234-123456789012",
+        id: "1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p",
+      },
+      {
+        title: "Product Manager",
+        type: "Part-Time",
+        location: "New York, NY",
+        description: "Seeking a talented Product Manager to lead our projects.",
+        salary: "$90K - $110K",
+        company: {
+          name: "Global Enterprises",
+          description: "We focus on innovative products and user experiences.",
+          contactEmail: "contact@globalenterprises.com",
+          contactPhone: "+1 (212) 555-9876",
+        },
+        creator: "janedoe",
+        creatorId: "23456789-2345-2345-2345-234567890123",
+        id: "7a8b9c0d-e1f2-3g4h-5i6j-7k8l9m0n1o2p",
+      },
+      {
+        title: "UI/UX Designer",
+        type: "Contract",
+        location: "Remote",
+        description:
+          "Looking for a creative UI/UX Designer to enhance our applications.",
+        salary: "$75K - $95K",
+        company: {
+          name: "Design Masters",
+          description: "We create visually stunning and user-friendly designs.",
+          contactEmail: "hello@designmasters.com",
+          contactPhone: "+1 (800) 555-0147",
+        },
+        creator: "mikejohnson",
+        creatorId: "34567890-3456-3456-3456-345678901234",
+        id: "3b4c5d6e-7f8g-9h0i-1j2k-3l4m5n6o7p8q",
+      },
+      {
+        title: "Data Analyst",
+        type: "Full-Time",
+        location: "Chicago, IL",
+        description: "Join our analytics team to derive insights from data.",
+        salary: "$85K - $105K",
+        company: {
+          name: "Insight Analytics",
+          description: "We specialize in data-driven solutions for businesses.",
+          contactEmail: "support@insightanalytics.com",
+          contactPhone: "+1 (312) 555-0189",
+        },
+        creator: "alicewhite",
+        creatorId: "45678901-4567-4567-4567-456789012345",
+        id: "4d5e6f7g-8h9i-0j1k-2l3m-4n5o6p7q8r9s",
+      },
+      {
+        title: "DevOps Engineer",
+        type: "Full-Time",
+        location: "Austin, TX",
+        description:
+          "Seeking a DevOps Engineer to streamline our development processes.",
+        salary: "$100K - $120K",
+        company: {
+          name: "Cloud Solutions LLC",
+          description:
+            "We provide cloud-based solutions for modern businesses.",
+          contactEmail: "contact@cloudsolutions.com",
+          contactPhone: "+1 (512) 555-0234",
+        },
+        creator: "robertdavis",
+        creatorId: "56789012-5678-5678-5678-567890123456",
+        id: "5e6f7g8h-9i0j-1k2l-3m4n-5o6p7q8r9s0t",
+      },
+    ];
+
+    // Insert jobs into the database
+    const jobResult = await jobCollection.insertMany(jobs);
+    console.log("Successfully loaded job data", jobResult);
+
+    // Custom function to hash a password
+    async function hashPassword(password) {
+      const saltRounds = 10;
+      const salt = await bcrypt.genSalt(saltRounds);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      return hashedPassword;
+    }
+
+    // Load user data
+    const users = [
+      {
+        firstName: "John",
+        lastName: "Smith",
+        username: "johnsmith",
+        password: "password123",
+        id: "12345678-1234-1234-1234-123456789012",
+      },
+      {
+        firstName: "Jane",
+        lastName: "Doe",
+        username: "janedoe",
+        password: "securepassword",
+        id: "23456789-2345-2345-2345-234567890123",
+      },
+      {
+        firstName: "Mike",
+        lastName: "Johnson",
+        username: "mikejohnson",
+        password: "mikepassword",
+        id: "34567890-3456-3456-3456-345678901234",
+      },
+      {
+        firstName: "Alice",
+        lastName: "White",
+        username: "alicewhite",
+        password: "alicepassword",
+        id: "45678901-4567-4567-4567-456789012345",
+      },
+      {
+        firstName: "Robert",
+        lastName: "Davis",
+        username: "robertdavis",
+        password: "robertpassword",
+        id: "56789012-5678-5678-5678-567890123456",
+      },
+    ];
+    // Hash passwords and prepare user data for insertion
+    const usersWithHashedPasswords = await Promise.all(
+      users.map(async (user) => {
+        const hashedPassword = await hashPassword(user.password);
+        return {
+          ...user,
+          password: hashedPassword, // Replace plain password with hashed one
+        };
+      })
+    );
+
+    // Insert users into the database
+    const userResult = await userCollection.insertMany(
+      usersWithHashedPasswords
+    );
+    console.log("Successfully loaded user data", userResult);
   } catch (error) {
     console.error("MongoDB connection error:", error);
-    throw error;
   } finally {
-    // client.close().then(() => {
-    //   console.log("Connection closed");
-    // });
+    // Close the connection
+    await client.close();
+    console.log("Connection closed");
   }
-
-  return;
 }
 
 main();
