@@ -1,4 +1,8 @@
-import { findUserDb, editUserDb } from "../repositories/userRepository";
+import {
+  findUserDb,
+  editUserDb,
+  deleteUserDb,
+} from "../repositories/userRepository";
 
 // Fetch a single user by userId
 export function getUser(userId) {
@@ -17,6 +21,18 @@ export function updateUser(userId, updatedUser) {
     .then((user) => {
       console.log("User updated:", user);
       return user;
+    })
+    .catch((error) => {
+      console.error("An error has occurred:", error);
+      throw error;
+    });
+}
+
+// Delete a user by userId
+export function deleteUser(userId) {
+  return deleteUserDb(userId)
+    .then(() => {
+      console.log("User deleted!");
     })
     .catch((error) => {
       console.error("An error has occurred:", error);

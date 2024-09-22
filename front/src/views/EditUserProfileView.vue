@@ -1,13 +1,10 @@
 <script setup>
-import router from "@/router";
 import { reactive, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { useToast } from "vue-toastification";
 import { useUsersStore } from "@/stores/UserStore";
 import axios from "axios";
 
 const route = useRoute();
-const toast = useToast();
 
 const userId = route.params.id;
 

@@ -33,3 +33,13 @@ export async function editUserDb(userId, updatedUser) {
 
   return user;
 }
+
+export async function deleteUserDb(userId) {
+  // Get all the jobs by user to delete
+  const jobs = await JobModel.find({ creatorId: userId });
+  for (const job of jobs) {
+    await JobModel.deleteOne({ creatorId: userId });
+  }
+
+  return UserModel.deleteOne({ id: userId });
+}

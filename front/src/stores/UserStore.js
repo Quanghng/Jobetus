@@ -5,11 +5,12 @@ import { useToast } from "vue-toastification";
 import router from "@/router";
 import axios from "axios";
 
+const toast = useToast();
+
 export const useUsersStore = defineStore({
   id: "user",
   state: () => ({
     user: Object,
-    jobs: [],
   }),
   actions: {
     async updateUser(userId, updatedUser) {
@@ -21,13 +22,14 @@ export const useUsersStore = defineStore({
         );
 
         const user = response.data;
-        console.log("user", user);
 
         // update local storage
         localStorage.setItem("user", JSON.stringify(user));
+
         // update pinia state
         const authStore = useAuthStore();
         authStore.user = user;
+
         router.push(`/user/${user.id}`);
         toast.success("Profile Updated Successfully");
       } catch (error) {
@@ -36,20 +38,32 @@ export const useUsersStore = defineStore({
         toast.error(errorMessage);
       }
     },
-    async deleteUser(id) {
-      // add isDeleting prop to user being deleted
-      // this.users.find((x) => x.id === id).isDeleting = true;
+    async deleteUser(userId) {
+      try {
+        const confirm = window.confirm(
+          "Are you sure you want to delete this account?"
+        );
+        if (confirm) {
+          await axios.delete(`/api/user/${userId}`);
 
-      // TODO at backend
-      await axios.delete(`api/users/${id}`);
+          // Redo the logout action to prevent the window warning
+          const authStore = useAuthStore();
+          authStore.user = null;
+          authStore.token = null;
+          authStore.isLoggedIn = false;
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
 
-      // remove user from list after deleted
-      // this.users = this.users.filter((x) => x.id !== id);
+          // update user store
+          this.user = {};
 
-      // auto logout if the logged in user deleted their own record
-      const authStore = useAuthStore();
-      if (id === authStore.user.id) {
-        authStore.logout();
+          router.push({ name: "home" });
+          toast.success("Account Deleted Successfully");
+        }
+      } catch (error) {
+        const errorMessage =
+          error.response?.data?.message || "deleteUser error!";
+        toast.error(errorMessage);
       }
     },
   },

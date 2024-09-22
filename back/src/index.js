@@ -12,7 +12,11 @@ import {
   handleGetJobsByUserId,
 } from "./controllers/jobController";
 import { handleRegisterUser, handleLogin } from "./controllers/authController";
-import { handleGetUser, handleUpdateUser } from "./controllers/userController";
+import {
+  handleGetUser,
+  handleUpdateUser,
+  handleDeleteUser,
+} from "./controllers/userController";
 
 dotenv.config({
   path: ".env",
@@ -48,7 +52,7 @@ connectToMongo()
     app.get("/user/:id", handleGetUser);
     app.get("/user/:id/jobs", handleGetJobsByUserId);
     app.put("/user/edit/:id", handleUpdateUser);
-    // app.delete("/user/:id", handleUpdateUser);
+    app.delete("/user/:id", handleDeleteUser);
 
     app.listen(port, () => {
       console.log(`[server]: Server is running at http://localhost:${port}`);

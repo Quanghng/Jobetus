@@ -1,4 +1,4 @@
-import { getUser, updateUser } from "../services/userService";
+import { getUser, updateUser, deleteUser } from "../services/userService";
 import UserModel from "../models/User";
 
 export async function handleGetUser(req, res) {
@@ -29,5 +29,15 @@ export async function handleUpdateUser(req, res) {
     res.status(200).json(user);
   } catch (error) {
     res.status(500).send("An error occurred while updating user.");
+  }
+}
+
+export async function handleDeleteUser(req, res) {
+  const userId = req.params.id;
+  try {
+    await deleteUser(userId);
+    res.status(200).send("User deleted!");
+  } catch (error) {
+    res.status(500).send("An error occurred while deleting job.");
   }
 }
