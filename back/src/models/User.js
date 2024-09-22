@@ -22,6 +22,29 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+// Encrypt password before updating
+userSchema.pre("findOneAndUpdate", async function (next) {
+  const update = this.getUpdate();
+  const query = this.getQuery(); // get the userId from the query
+
+  // Only proceed if the password is being updated
+  if (update.$set && update.$set.password) {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(update.$set.password, saltRounds);
+    update.$set.password = hashedPassword;
+  } else {
+    // If the password is empty, retain the old password
+    const userId = query.id;
+    const existingUser = await this.model.findOne({ id: userId });
+
+    if (existingUser) {
+      update.$set.password = existingUser.password;
+    }
+  }
+
+  next();
+});
+
 // Check if password matches
 userSchema.methods.comparePassword = async function (candidatePassword) {
   try {

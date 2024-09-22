@@ -5,13 +5,10 @@ import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import BackButton from "@/components/BackButton.vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useUsersStore } from "@/stores/UserStore";
 
 const route = useRoute();
-const router = useRouter();
-const toast = useToast();
-
-const authStore = useAuthStore();
+const userStore = useUsersStore();
 const userId = route.params.id;
 
 const state = reactive({
@@ -94,7 +91,7 @@ onMounted(async () => {
             <h3 class="text-xl font-bold mb-6 text-gray-700">Manage Account</h3>
 
             <RouterLink
-              :to="`/users/edit/${state.user.id}`"
+              :to="`/user/edit/${state.user.id}`"
               class="bg-teal-500 hover:bg-teal-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
               >Update Account</RouterLink
             >

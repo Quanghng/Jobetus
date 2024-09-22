@@ -35,11 +35,9 @@ export async function handleGetJob(req, res) {
 
 // Get jobs by userId
 export async function handleGetJobsByUserId(req, res) {
-  console.log("inside handler...");
   const userId = req.params.id;
   try {
     const jobs = await getJobsByUserId(userId);
-    console.log("jobs : ", jobs);
     if (jobs) {
       res.status(200).json(jobs);
     } else {

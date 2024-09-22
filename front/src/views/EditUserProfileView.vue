@@ -3,6 +3,7 @@ import router from "@/router";
 import { reactive, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
+import { useUsersStore } from "@/stores/UserStore";
 import axios from "axios";
 
 const route = useRoute();
@@ -11,47 +12,37 @@ const toast = useToast();
 const userId = route.params.id;
 
 const form = reactive({
-  firstname: "test",
-  lastname: "test",
-  username: "test",
-  email: "test",
-  phone: "test",
+  firstName: "",
+  lastName: "",
+  username: "",
+  password: "",
 });
 
 const state = reactive({
   user: {},
-  // TODO turn back to true when done with backend
-  isLoading: flase,
+  isLoading: true,
 });
 
 const handleSubmit = async () => {
-  // const updatedUser = {
-  //   firstname: form.firstname,
-  //   lastname: form.lastname,
-  //   username: form.username,
-  //   email: form.email,
-  //   phone: form.phone,
-  // };
-  // try {
-  //   const response = await axios.put(`/api/users/${userId}`, updatedUser);
-  //   toast.success("Profile Updated Successfully");
-  //   router.push(`/users/${response.data.id}`);
-  // } catch (error) {
-  //   console.error("Error updating profile", error);
-  //   toast.error("Profile Update Failed");
-  // }
+  const updatedUser = {
+    firstName: form.firstName,
+    lastName: form.lastName,
+    username: form.username,
+    password: form.password,
+  };
+  const userStore = useUsersStore();
+  await userStore.updateUser(userId, updatedUser);
 };
 
 onMounted(async () => {
   try {
-    // const response = await axios.get(`/api/users/${userId}`);
+    const response = await axios.get(`/api/user/${userId}`);
     state.user = response.data;
     // Populate form fields
-    form.firstname = "state.user.firstname";
-    form.lastname = "state.user.lastname";
-    form.username = "state.user.username";
-    form.email = "state.user.email";
-    form.phone = "state.user.phone";
+    form.firstName = state.user.firstName;
+    form.lastName = state.user.lastName;
+    form.username = state.user.username;
+    form.password = "";
   } catch (error) {
     console.error("Error fetching user", error);
   } finally {
@@ -69,28 +60,28 @@ onMounted(async () => {
           <h2 class="text-3xl text-center font-semibold mb-6">Edit Profile</h2>
 
           <div class="mb-4">
-            <label for="firstname" class="block text-gray-700 font-bold mb-2">
+            <label for="firstName" class="block text-gray-700 font-bold mb-2">
               First Name
             </label>
             <input
               type="text"
-              v-model="form.firstname"
-              id="firstname"
-              name="firstname"
+              v-model="form.firstName"
+              id="firstName"
+              name="firstName"
               class="border rounded w-full py-2 px-3 mb-2"
               placeholder="First Name"
               required />
           </div>
 
           <div class="mb-4">
-            <label for="lastname" class="block text-gray-700 font-bold mb-2">
+            <label for="lastName" class="block text-gray-700 font-bold mb-2">
               Last Name
             </label>
             <input
               type="text"
-              v-model="form.lastname"
-              id="lastname"
-              name="lastname"
+              v-model="form.lastName"
+              id="lastName"
+              name="lastName"
               class="border rounded w-full py-2 px-3 mb-2"
               placeholder="Last Name"
               required />
@@ -111,30 +102,20 @@ onMounted(async () => {
           </div>
 
           <div class="mb-4">
-            <label for="email" class="block text-gray-700 font-bold mb-2">
-              Email
+            <label for="password" class="block text-gray-700 font-bold mb-2">
+              Password
             </label>
             <input
-              type="email"
-              v-model="form.email"
-              id="email"
-              name="email"
+              type="password"
+              v-model="form.password"
+              id="password"
+              name="password"
               class="border rounded w-full py-2 px-3 mb-2"
-              placeholder="Email"
-              required />
-          </div>
-
-          <div class="mb-4">
-            <label for="phone" class="block text-gray-700 font-bold mb-2">
-              Phone
-            </label>
-            <input
-              type="tel"
-              v-model="form.phone"
-              id="phone"
-              name="phone"
-              class="border rounded w-full py-2 px-3 mb-2"
-              placeholder="Phone (Optional)" />
+              placeholder="New Password" />
+            <p class="text-xs text-gray-500">
+              Leave this field empty if you don't want to change your password.
+            </p>
+            <!-- Additional guidance below the field -->
           </div>
 
           <div>

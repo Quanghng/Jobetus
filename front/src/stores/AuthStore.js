@@ -46,6 +46,10 @@ export const useAuthStore = defineStore({
         this.user.token = token;
         this.isLoggedIn = true;
 
+        // update user store
+        const userStore = useUsersStore();
+        userStore.user = user;
+
         // redirect to previous url or default to home page
         router.push({ name: "home" });
         toast.success("Login successfully !");
@@ -60,6 +64,10 @@ export const useAuthStore = defineStore({
       if (token) {
         this.token = token;
         this.isLoggedIn = true;
+
+        // update user store
+        const userStore = useUsersStore();
+        userStore.user = localStorage.getItem("user");
       } else {
         this.isLoggedIn = false;
       }
@@ -72,7 +80,13 @@ export const useAuthStore = defineStore({
         this.isLoggedIn = false;
         localStorage.removeItem("user");
         localStorage.removeItem("token");
+
+        // update user store
+        const userStore = useUsersStore();
+        userStore.user = {};
+
         router.push({ name: "home" });
+        toast.success("Logout successfully !");
       }
     },
   },

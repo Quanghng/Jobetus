@@ -1,50 +1,42 @@
 import { defineStore } from "pinia";
+import { useRoute } from "vue-router";
 import { useAuthStore } from "./AuthStore";
+import { useToast } from "vue-toastification";
+import router from "@/router";
 import axios from "axios";
 
 export const useUsersStore = defineStore({
   id: "user",
   state: () => ({
-    // Can hold {} / {loading: true}
-    user: {},
+    user: Object,
     jobs: [],
   }),
   actions: {
-    // GetAllJobs -> filter id match jobs
-    async getJobs() {
-      this.users = { loading: true };
+    async updateUser(userId, updatedUser) {
+      const toast = useToast();
       try {
-        // TODO at backend
-        // this.users = await axios.get(baseUrl);
-      } catch (error) {
-        // TODO toast here
-        // this.users = { error };
-      }
-    },
-    // async getById(id) {
-    //   this.user = { loading: true };
-    //   try {
-    //     this.user = await axios.get(`api/users/${id}`);
-    //   } catch (error) {
-    //     this.user = { error };
-    //   }
-    // },
-    async update(id, params) {
-      // TODO at backend
-      await axios.put(`api/users/${id}`, params);
+        const response = await axios.put(
+          `/api/user/edit/${userId}`,
+          updatedUser
+        );
 
-      // update local stored user if the logged in user updated their own record
-      const authStore = useAuthStore();
-      if (id === authStore.user.id) {
+        const user = response.data;
+        console.log("user", user);
+
         // update local storage
-        const user = { ...authStore.user, ...params };
         localStorage.setItem("user", JSON.stringify(user));
-
-        // update auth user in pinia state
+        // update pinia state
+        const authStore = useAuthStore();
         authStore.user = user;
+        router.push(`/user/${user.id}`);
+        toast.success("Profile Updated Successfully");
+      } catch (error) {
+        const errorMessage =
+          error.response?.data?.message || "updateUser error!";
+        toast.error(errorMessage);
       }
     },
-    async delete(id) {
+    async deleteUser(id) {
       // add isDeleting prop to user being deleted
       // this.users.find((x) => x.id === id).isDeleting = true;
 

@@ -1,4 +1,4 @@
-import { registerUserDb } from "../repositories/userRpository";
+import { registerUserDb } from "../repositories/userRepository";
 
 export function registerUser(newUser) {
   return registerUserDb(newUser)
