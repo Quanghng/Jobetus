@@ -20,7 +20,7 @@ jobs:
       # Set Up Node.js
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.4
-          
+
       # Install Backend Dependencies
       - name: Install Backend Dependencies
         run: |
@@ -43,4 +43,4 @@ jobs:
       - name: Run Frontend Tests
         run: |
           cd front
-          npm test
+          npm run cy:open
