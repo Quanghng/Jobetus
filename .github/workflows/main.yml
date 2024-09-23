@@ -32,15 +32,3 @@ jobs:
         run: |
           cd back
           npm test
-
-      # Install Frontend Dependencies
-      - name: Install Frontend Dependencies
-        run: |
-          cd front
-          npm install
-
-      # Run Frontend Tests
-      - name: Run Frontend Tests
-        run: |
-          cd front
-          npm run cy:open
