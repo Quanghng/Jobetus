@@ -86,5 +86,5 @@ Jobetus is a web application designed to connect students with recruiters, allow
 ### Frontend
 - **End-to-End Testing**
   ```bash
-  npm run run:cypress
+  npm run cy:open
   ```
