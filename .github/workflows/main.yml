@@ -13,20 +13,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout Code
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Set Up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "20.17.0"
-
+      # Set Up Node.js
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.0.4
+          
+      # Install Backend Dependencies
       - name: Install Backend Dependencies
         run: |
-          cd jobetus/back
+          cd back
           npm install
 
+      # Run Backend Tests
       - name: Run Backend Tests
         run: |
-          cd jobetus/back
+          cd back
+          npm test
+
+      # Install Frontend Dependencies
+      - name: Install Frontend Dependencies
+        run: |
+          cd front
+          npm install
+
+      # Run Frontend Tests
+      - name: Run Frontend Tests
+        run: |
+          cd front
           npm test
