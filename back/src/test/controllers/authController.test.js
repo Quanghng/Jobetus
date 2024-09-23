@@ -98,7 +98,9 @@ describe("AuthController", () => {
       await handleLogin(req, res);
 
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ message: "Invalid credentials" });
+      expect(res.json).toHaveBeenCalledWith({
+        message: "User doesn't exsit !",
+      });
     });
 
     it("should return 400 if password is incorrect", async () => {
@@ -115,7 +117,7 @@ describe("AuthController", () => {
       expect(UserModel.findOne).toHaveBeenCalledWith({ username: "testUser" });
       expect(mockUser.comparePassword).toHaveBeenCalledWith("wrongPass");
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ message: "Invalid credentials" });
+      expect(res.json).toHaveBeenCalledWith({ message: "Wrong password !" });
     });
 
     it("should return 500 if there is an error during login", async () => {
