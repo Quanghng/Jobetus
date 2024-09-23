@@ -44,6 +44,7 @@ Jobetus is a web application designed to connect students with recruiters, allow
    ```bash
    npm ci
    ```
+*Note* :  ```npm ci``` will install exact dependency versions from the lockfile (package-lock.json) which is recommended for ensuring reproducibility.
 
 ## Running the Project
 
