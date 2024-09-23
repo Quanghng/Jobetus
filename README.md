@@ -19,10 +19,68 @@ Jobetus is a web application designed to connect students with recruiters, allow
 - Responsive web design
 
 ## Project Structure
-*To be filled later*
+The project structure is organized as follows:
+
+### Backend
+- `index.js`: The main entry point of the backend application.
+- `config/`: Contains configuration files (database setup).
+- `controllers/`: Responsible for handling incoming requests and orchestrating data flow.
+- `models/`: Data models and schema definitions for the database.
+- `repositories/`: Manages the data access layer, interacting with the database.
+- `services/`: Contains business logic and service-layer code.
+- `test/`: Test files for unit testing controller logic.
+
+### Frontend
+- `App.vue`: The root Vue component that serves as the main application wrapper.
+- `main.js`: The main entry point for the frontend application.
+- `assets/`: Contains static assets such as images, fonts, etc.
+- `components/`: Reusable UI components.
+- `router/`: Defines routes for the frontend application.
+- `stores/`: State management logic.
+- `views/`: Page-level components representing distinct views.
+
 
 ## API Documentation
-*To be filled later*
+
+### Job Routes
+
+```GET```
+**/jobs** : Get all jobs.
+
+```GET```
+**/jobs/:id** : Get the job with the specified {id}.
+
+```PUT```
+**/jobs/:id** : Update the job with the specified {id}.
+
+```POST```
+**/jobs** : Add a new job.
+
+```DELETE```
+**/jobs/:id** : Delete the job with the specified {id}.
+
+### Auth Routes
+
+```POST```
+**/users/register** : Register a new user.
+
+```POST```
+**/authenticate** : Log in a user.
+
+### User Routes
+
+```GET```
+**/user/:id** : Get the user with the specified {id}.
+
+```GET```
+**/user/:id/jobs** : Get all jobs posted by the user with the specified {id}.
+
+```PUT```
+**/user/edit/:id** : Update the user with the specified {id}.
+
+```DELETE```
+**/user/:id** : Delete the user with the specified {id}.
+
 
 ## Installation Guide
 
