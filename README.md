@@ -96,7 +96,7 @@ The project structure is organized as follows:
    ```
 2. **Navigate to the project directory**
    ```bash
-   cd jobetus
+   cd Jobetus
    ```
 3. **Install the dependencies**
    - For frontend
